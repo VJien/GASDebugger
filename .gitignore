@@ -1,0 +1,10 @@
+Binaries
+Intermediate
+Saved
+.vs
+DerivedDataCache
+Content/Test
+Build
+.idea
+*.sln
+
