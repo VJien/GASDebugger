@@ -17,12 +17,23 @@ class GASDEBUGGER_API UGASDebuggerWidgetBase : public UEditorUtilityWidget
 protected:
 	virtual void NativeConstruct() override;
 	virtual void NativePreConstruct() override;
-
+	virtual void NativeDestruct() override;
 	UFUNCTION(BlueprintCallable,BlueprintPure)
 	UWorld* GetEditorWorld()const;
 	UFUNCTION(BlueprintCallable,BlueprintPure)
 	UWorld* GetPIEWorld()const;
 
+	UFUNCTION()
+	void OnPIEStarted(bool bIsSimulating);
+	UFUNCTION()
+	void OnPIEEnded(bool bIsSimulating);
+
+
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPIEStart();
+	UFUNCTION(BlueprintImplementableEvent)
+	void OnPIEEnd();
+	
 	//自动查询玩家类并运行
 	UFUNCTION(BlueprintCallable)
 	bool RunDirectly();
@@ -34,3 +45,4 @@ public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "AbilityWidget")
 	void InitAbilityWidget(UAbilitySystemComponent* AbilitySystemComponent);
 };
+

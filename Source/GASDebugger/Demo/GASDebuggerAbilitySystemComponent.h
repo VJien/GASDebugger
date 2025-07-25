@@ -24,4 +24,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType,
 	                           FActorComponentTickFunction* ThisTickFunction) override;
+
+
+	UFUNCTION(BlueprintCallable, Category = "ASC")
+	FGameplayAbilitySpecHandle AddNewAbility(TSubclassOf<UGameplayAbility> AbilityClass, int32 level);
+
+	UFUNCTION(BlueprintCallable, Category = "ASC")
+	bool RemoveAbilityByClass(TSubclassOf<UGameplayAbility> AbilityClass, FGameplayAbilitySpecHandle& OutHandle);
+	
 };

@@ -34,3 +34,29 @@ void UGASDebuggerAbilitySystemComponent::TickComponent(float DeltaTime, ELevelTi
 	// ...
 }
 
+FGameplayAbilitySpecHandle UGASDebuggerAbilitySystemComponent::AddNewAbility(TSubclassOf<UGameplayAbility> AbilityClass,
+	int32 level)
+{
+	FGameplayAbilitySpecHandle SpecHandle;
+	if (!AbilityClass)
+	{
+		return SpecHandle;
+	}
+	auto&& AbilityCDO = AbilityClass->GetDefaultObject<UGameplayAbility>();
+	FGameplayAbilitySpec AbilitySpec(AbilityCDO, level);
+	SpecHandle = GiveAbility(AbilitySpec);
+	return SpecHandle;
+}
+
+bool UGASDebuggerAbilitySystemComponent::RemoveAbilityByClass(TSubclassOf<UGameplayAbility> AbilityClass,
+                                                              FGameplayAbilitySpecHandle& OutHandle)
+{
+	if (FGameplayAbilitySpec* spec = FindAbilitySpecFromClass(AbilityClass))
+	{
+		OutHandle = spec->Handle;
+		this->ClearAbility(spec->Handle);
+		return true;
+	}
+	return false;
+}
+

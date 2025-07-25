@@ -10,6 +10,7 @@
 #include "Widgets/Text/STextBlock.h"
 #include "ToolMenus.h"
 #include "Blueprint/UserWidget.h"
+#include "Widgets/Layout/SScaleBox.h"
 
 static const FName GASDebuggerTabName("GASDebugger");
 
@@ -72,9 +73,9 @@ TSharedRef<SDockTab> FGASDebuggerModule::OnSpawnPluginTab(const FSpawnTabArgs& S
 			.TabRole(ETabRole::NomadTab)
 			[
 				// Put your tab content here!
-				SNew(SBox)
-				.HAlign(HAlign_Center)
-				.VAlign(VAlign_Center)
+				SNew(SScaleBox)
+				.HAlign(HAlign_Fill)
+				.VAlign(VAlign_Fill)
 				[
 					EdUI->TakeWidget()
 				]

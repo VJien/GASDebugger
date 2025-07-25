@@ -10,6 +10,9 @@
 void UGASDebuggerWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
+	FEditorDelegates::BeginPIE.AddUObject(this, &ThisClass::OnPIEStarted);
+	FEditorDelegates::EndPIE.AddUObject(this, &ThisClass::OnPIEEnded);
+
 }
 
 void UGASDebuggerWidgetBase::NativePreConstruct()
@@ -17,6 +20,12 @@ void UGASDebuggerWidgetBase::NativePreConstruct()
 	Super::NativePreConstruct();
 }
 
+void UGASDebuggerWidgetBase::NativeDestruct()
+{
+	FEditorDelegates::BeginPIE.RemoveAll(this);
+	FEditorDelegates::EndPIE.RemoveAll(this);
+	Super::NativeDestruct();
+}
 
 
 UWorld* UGASDebuggerWidgetBase::GetEditorWorld() const
@@ -38,6 +47,18 @@ UWorld* UGASDebuggerWidgetBase::GetPIEWorld() const
 		}
 	}
 	return nullptr;
+}
+
+void UGASDebuggerWidgetBase::OnPIEStarted(bool bIsSimulating)
+{
+	UE_LOG(LogTemp, Log, TEXT("GASDebuggerWidgetBase: PIE started. Simulating: %s"), bIsSimulating ? TEXT("true") : TEXT("false"));
+	OnPIEStart();
+}
+
+void UGASDebuggerWidgetBase::OnPIEEnded(bool bIsSimulating)
+{
+	UE_LOG(LogTemp, Log, TEXT("GASDebuggerWidgetBase: PIE ended. Simulating: %s"), bIsSimulating ? TEXT("true") : TEXT("false"));
+	OnPIEEnd();
 }
 
 bool UGASDebuggerWidgetBase::RunDirectly()

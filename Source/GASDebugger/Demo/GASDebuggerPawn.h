@@ -3,7 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GASDebuggerAbilitySystemComponent.h"
 #include "GASDebuggerAttributeSet.h"
+#include "Abilities/GameplayAbility.h"
 #include "GameFramework/Pawn.h"
 #include "GASDebuggerPawn.generated.h"
 
@@ -35,5 +37,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly,EditAnywhere)
 	UGASDebuggerAttributeSet* DebuggerAttributeSet = nullptr;
 	UPROPERTY(BlueprintReadOnly,EditAnywhere)
- 	UAbilitySystemComponent* AbilitySystemComponent = nullptr;
+ 	UGASDebuggerAbilitySystemComponent* AbilitySystemComponent = nullptr;
+
+
+	UPROPERTY(BlueprintReadOnly,EditAnywhere)
+	TArray<TSubclassOf<UGameplayAbility>> AbilitiesToGrant;
+	
 };
