@@ -40,3 +40,8 @@ FString UGASDebuggerLibrary::GetTimeInfo()
 				   UKismetMathLibrary::Now().GetMillisecond());
 	return CurrentTime;
 }
+
+FString UGASDebuggerLibrary::GetAttributeName(FGameplayAttribute Attribute)
+{
+	return Attribute.GetName();
+}
