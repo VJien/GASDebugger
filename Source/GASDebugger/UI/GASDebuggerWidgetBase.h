@@ -33,10 +33,12 @@ protected:
 	void OnPIEStart();
 	UFUNCTION(BlueprintImplementableEvent)
 	void OnPIEEnd();
+
+	void OnActorsInitialized(const UWorld::FActorsInitializedParams& Params);
 	
 	//自动查询玩家类并运行
 	UFUNCTION(BlueprintCallable)
-	bool RunDirectly();
+	bool RunDirectly(AActor*& OutASCOwner, UAbilitySystemComponent*& OutASC);
 	
 	UPROPERTY(BlueprintReadOnly)
 	UAbilitySystemComponent* OwningAbilitySystemComponent = nullptr;

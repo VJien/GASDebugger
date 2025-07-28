@@ -7,7 +7,7 @@
 #include "GASDebuggerAbilitySystemComponent.generated.h"
 
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
+UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent),BlueprintType,Blueprintable)
 class GASDEBUGGER_API UGASDebuggerAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
@@ -31,5 +31,16 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = "ASC")
 	bool RemoveAbilityByClass(TSubclassOf<UGameplayAbility> AbilityClass, FGameplayAbilitySpecHandle& OutHandle);
-	
+
+
+
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	void AddTag(FGameplayTag Tag,int32 Count = 1);
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	void AddTags(FGameplayTagContainer TagContainer);
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	void RemoveTag(FGameplayTag Tag,int32 Count = 1);
+	UFUNCTION(BlueprintCallable, Category = "Ability")
+	void RemoveTags(FGameplayTagContainer TagContainer);
 };
+

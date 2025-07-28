@@ -17,5 +17,8 @@ class GASDEBUGGER_API UGASDebuggerLibrary : public UBlueprintFunctionLibrary
 public:
 	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
 	static int32 GetAbilityActiveCount(UAbilitySystemComponent* AbilitySystemComponent,  TSubclassOf<UGameplayAbility> AbilityClass);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	static int32 GetGameplayTagCount (UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag);
 
+	static FString GetTimeInfo();
 };

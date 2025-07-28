@@ -60,3 +60,22 @@ bool UGASDebuggerAbilitySystemComponent::RemoveAbilityByClass(TSubclassOf<UGamep
 	return false;
 }
 
+void UGASDebuggerAbilitySystemComponent::AddTag(FGameplayTag Tag, int32 Count)
+{
+	AddLooseGameplayTag(Tag,Count);
+}
+
+void UGASDebuggerAbilitySystemComponent::AddTags(FGameplayTagContainer TagContainer)
+{
+	AddLooseGameplayTags(TagContainer);
+}
+
+void UGASDebuggerAbilitySystemComponent::RemoveTag(FGameplayTag Tag, int32 Count)
+{
+	RemoveLooseGameplayTag(Tag,Count);
+}
+
+void UGASDebuggerAbilitySystemComponent::RemoveTags(FGameplayTagContainer TagContainer)
+{
+	RemoveLooseGameplayTags(TagContainer);
+}

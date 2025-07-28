@@ -3,8 +3,10 @@
 
 #include "GASDebuggerLibrary.h"
 
+#include "Kismet/KismetMathLibrary.h"
+
 int32 UGASDebuggerLibrary::GetAbilityActiveCount(UAbilitySystemComponent* AbilitySystemComponent,
-	TSubclassOf<UGameplayAbility> AbilityClass)
+                                                 TSubclassOf<UGameplayAbility> AbilityClass)
 {
 	if (AbilitySystemComponent == nullptr || AbilityClass == nullptr)
 	{
@@ -19,4 +21,22 @@ int32 UGASDebuggerLibrary::GetAbilityActiveCount(UAbilitySystemComponent* Abilit
 		}
 	}
 	return 0;
+}
+
+int32 UGASDebuggerLibrary::GetGameplayTagCount(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag)
+{
+	if (AbilitySystemComponent == nullptr || !Tag.IsValid())
+	{
+		return -1;
+	}
+	return AbilitySystemComponent->GetTagCount(Tag);
+}
+
+FString UGASDebuggerLibrary::GetTimeInfo()
+{
+	FString CurrentTime = FString::Printf(TEXT("%d:%d:%d:%d"), UKismetMathLibrary::Now().GetHour(),
+				   UKismetMathLibrary::Now().GetMinute(),
+				   UKismetMathLibrary::Now().GetSecond(),
+				   UKismetMathLibrary::Now().GetMillisecond());
+	return CurrentTime;
 }

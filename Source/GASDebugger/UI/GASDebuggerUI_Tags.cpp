@@ -5,6 +5,8 @@
 
 #include "AbilitySystemComponent.h"
 #include "Components/VerticalBox.h"
+#include "GASDebugger/GASDebuggerLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UGASDebuggerUI_Tags::NativePreConstruct()
 {
@@ -41,27 +43,35 @@ void UGASDebuggerUI_Tags::UpdateTags()
 	{
 		return;
 	}
+	TagsContainer_Current.Reset();
 	OwningAbilitySystemComponent->GetOwnedGameplayTags(TagsContainer_Current);
+	//新的tags
+	TArray<FGameplayTag> NewTags;
+	TagsContainer_Current.GetGameplayTagArray(NewTags);
+	RefreshCurrentTagsWidget(NewTags);
 	if (TagsContainer_Current != TagsContainer_Old)
 	{
-		//新的tags
-		TArray<FGameplayTag> NewTags;
-		TagsContainer_Current.GetGameplayTagArray(NewTags);
-		RefreshCurrentTagsWidget(NewTags);
+		
 		//刷新之前的tags
-		TagsContainer_Old.GetGameplayTagArray(Tags_Old);
+		TArray<FGameplayTag> Old;
+		TagsContainer_Old.GetGameplayTagArray(Old);
+		Tags_Old.Empty();
 		//合并新的旧的tags
 		for (auto&& tag:NewTags)
 		{
-			Tags_Old.AddUnique(tag);
+			Old.AddUnique(tag);
 		}
 		//移除所有newtags，得到removedtags
-		Tags_Old.RemoveAll([&NewTags](const FGameplayTag& Tag)
+		Old.RemoveAll([&NewTags](const FGameplayTag& Tag)
 		{
 			return NewTags.Contains(Tag);
 		});
-		if (Tags_Old.Num()>0)
+		if (Old.Num()>0)
 		{
+			for (auto&& tag:Old)
+			{
+				Tags_Old.Add({tag, UGASDebuggerLibrary::GetTimeInfo()});
+			}
 			RefreshRemovedTagsWidget(Tags_Old);
 		}
 	}

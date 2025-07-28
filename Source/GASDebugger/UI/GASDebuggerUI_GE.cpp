@@ -19,7 +19,7 @@ void UGASDebuggerUI_GE::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 	{
 		return;
 	}
-#if UE5_VERSION
+#if UE5_OR_LATER
 	const FActiveGameplayEffectsContainer& GeContainer = OwningAbilitySystemComponent->GetActiveGameplayEffects();
 	CurrActiveGameplayEffects = GeContainer.GetAllActiveEffectHandles();
 #else

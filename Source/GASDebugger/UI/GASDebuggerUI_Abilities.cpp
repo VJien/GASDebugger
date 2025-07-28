@@ -4,6 +4,8 @@
 #include "GASDebuggerUI_Abilities.h"
 
 #include "AbilitySystemComponent.h"
+#include "GASDebugger/GASDebuggerLibrary.h"
+#include "Kismet/KismetMathLibrary.h"
 
 void UGASDebuggerUI_Abilities::InitAbilityWidget_Implementation(UAbilitySystemComponent* AbilitySystemComponent)
 {
@@ -39,7 +41,15 @@ void UGASDebuggerUI_Abilities::UpdateAbilities()
 			return NewAbilities.Contains(Ability);
 		});
 		CurrentAbilities = NewAbilities;
-		RefreshRemovedAbilitiesWidget(RemovedAbilities);
+		TArray<FGASDebuggerUI_AbilitiesData> RemovedAbilitiesData;
+		for (auto&& RemoveAbility : RemovedAbilities)
+		{
+			FGASDebuggerUI_AbilitiesData Data;
+			Data.Ability = RemoveAbility;
+			Data.Info = UGASDebuggerLibrary::GetTimeInfo();
+			RemovedAbilitiesData.Add(Data);
+		}
+		RefreshRemovedAbilitiesWidget(RemovedAbilitiesData);
 		RefreshCurrentAbilitiesWidget(CurrentAbilities);
 	}
 		

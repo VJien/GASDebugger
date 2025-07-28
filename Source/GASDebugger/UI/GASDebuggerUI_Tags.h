@@ -10,9 +10,29 @@
 
 class UGridPanel;
 class UVerticalBox;
-/**
- * 
- */
+
+
+USTRUCT(BlueprintType)
+struct FGASDebuggerTagInfo
+{
+	GENERATED_BODY()
+	FGASDebuggerTagInfo ()
+	{
+		Tag = FGameplayTag::EmptyTag;
+		Info = FString();
+	}
+	FGASDebuggerTagInfo(const FGameplayTag& InTag, const FString& InInfo)
+		: Tag(InTag), Info(InInfo)
+	{
+	}
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FGameplayTag Tag;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	FString Info;
+};
+
+
 UCLASS()
 class GASDEBUGGER_API UGASDebuggerUI_Tags : public UGASDebuggerWidgetBase
 {
@@ -28,7 +48,7 @@ public:
 	void UpdateTags();
 
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
-	void RefreshRemovedTagsWidget(const TArray<FGameplayTag>& RemovedTags);
+	void RefreshRemovedTagsWidget(const TArray<FGASDebuggerTagInfo>& RemovedTags);
 
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
 	void RefreshCurrentTagsWidget(const TArray<FGameplayTag>& CurrentTags);
@@ -46,7 +66,7 @@ public:
 	UPROPERTY()
 	FGameplayTagContainer TagsContainer_Old;
 	UPROPERTY()
-	TArray<FGameplayTag> Tags_Old;
+	TArray<FGASDebuggerTagInfo> Tags_Old;
 
 	
 

@@ -10,9 +10,10 @@
 void UGASDebuggerWidgetBase::NativeConstruct()
 {
 	Super::NativeConstruct();
-	FEditorDelegates::BeginPIE.AddUObject(this, &ThisClass::OnPIEStarted);
+	FEditorDelegates::PostPIEStarted.AddUObject(this, &ThisClass::OnPIEStarted);
 	FEditorDelegates::EndPIE.AddUObject(this, &ThisClass::OnPIEEnded);
-
+	auto&& Wd = GetPIEWorld();
+	
 }
 
 void UGASDebuggerWidgetBase::NativePreConstruct()
@@ -61,7 +62,12 @@ void UGASDebuggerWidgetBase::OnPIEEnded(bool bIsSimulating)
 	OnPIEEnd();
 }
 
-bool UGASDebuggerWidgetBase::RunDirectly()
+void UGASDebuggerWidgetBase::OnActorsInitialized(const UWorld::FActorsInitializedParams& Params)
+{
+	OnPIEStart();
+}
+
+bool UGASDebuggerWidgetBase::RunDirectly(AActor*& OutASCOwner, UAbilitySystemComponent*& OutASC)
 {
 	bool bInit = false;
 	if (auto&& OwningPlayer = GetOwningPlayer())
@@ -69,6 +75,8 @@ bool UGASDebuggerWidgetBase::RunDirectly()
 		if (auto&& ASC = OwningPlayer->FindComponentByClass<UAbilitySystemComponent>())
 		{
 			InitAbilityWidget(ASC);
+			OutASC = ASC;
+			OutASCOwner = OwningPlayer;
 			bInit = true;
 		}
 		else
@@ -85,6 +93,8 @@ bool UGASDebuggerWidgetBase::RunDirectly()
 			auto&& ASC = PC->FindComponentByClass<UAbilitySystemComponent>();
 			if (ASC)
 			{
+				OutASCOwner = PC;
+				OutASC = ASC;
 				InitAbilityWidget(ASC);
 				bInit = true;
 			}
@@ -104,6 +114,8 @@ bool UGASDebuggerWidgetBase::RunDirectly()
 				auto&& ASC = PlayerPawn->FindComponentByClass<UAbilitySystemComponent>();
 				if (ASC)
 				{
+					OutASCOwner = PlayerPawn;
+					OutASC = ASC;
 					InitAbilityWidget(ASC);
 					bInit = true;
 				}
@@ -121,6 +133,8 @@ bool UGASDebuggerWidgetBase::RunDirectly()
 				auto&& ASC = PC->FindComponentByClass<UAbilitySystemComponent>();
 				if (ASC)
 				{
+					OutASCOwner = PC;
+					OutASC = ASC;
 					InitAbilityWidget(ASC);
 					bInit = true;
 				}

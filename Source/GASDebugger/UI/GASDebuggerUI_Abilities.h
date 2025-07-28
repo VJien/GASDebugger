@@ -7,9 +7,20 @@
 #include "GASDebuggerUI_Abilities.generated.h"
 
 class UGameplayAbility;
-/**
- * 
- */
+
+USTRUCT(BlueprintType)
+struct FGASDebuggerUI_AbilitiesData
+{
+	GENERATED_BODY()
+	
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	UGameplayAbility* Ability = nullptr;
+	UPROPERTY(BlueprintReadOnly, EditAnywhere)
+	FString Info;
+};
+
+
+
 UCLASS()
 class GASDEBUGGER_API UGASDebuggerUI_Abilities : public UGASDebuggerWidgetBase
 {
@@ -21,7 +32,7 @@ public:
 	void UpdateAbilities();
 
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
-	void RefreshRemovedAbilitiesWidget(const TArray<UGameplayAbility*>& _RemovedAbilities);
+	void RefreshRemovedAbilitiesWidget(const TArray<FGASDebuggerUI_AbilitiesData>& _RemovedAbilities);
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
 	void RefreshCurrentAbilitiesWidget(const TArray<UGameplayAbility*>& _CurrentAbilities);
 

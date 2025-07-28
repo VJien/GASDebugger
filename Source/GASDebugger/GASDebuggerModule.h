@@ -9,9 +9,11 @@ class FToolBarBuilder;
 class FMenuBuilder;
 
 
-#define UE5_VERSION 0
+// #ifndef UE_5_0_OR_LATER
+// #define UE_5_0_OR_LATER UE_VERSION_OR_LATER(5, 0)
+// #endif
 
-
+#define UE5_OR_LATER 0
 
 class FGASDebuggerModule : public IModuleInterface
 {
