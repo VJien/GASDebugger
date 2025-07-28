@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "GameplayEffect.h"
+#include "GameplayEffectTypes.h"
 #include "Blutility/Classes/EditorUtilityWidget.h"
 #include "GASDebuggerWidgetBase.generated.h"
 
@@ -43,6 +45,26 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	UAbilitySystemComponent* OwningAbilitySystemComponent = nullptr;
 
+
+
+
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	FGameplayEffectSpec GetGameplayEffectSpecFromHandle(UAbilitySystemComponent* AbilitySystemComponent, FActiveGameplayEffectHandle Handle);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	float GetGameplayEffectDefaultDuration(FGameplayEffectSpec Spec);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	float GetGameplayEffectCurrentTimeByHandle(UAbilitySystemComponent* AbilitySystemComponent, FActiveGameplayEffectHandle Handle);
+
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	TArray<FGameplayEffectSpec> GetAllActiveGameplayEffects(UAbilitySystemComponent* AbilitySystemComponent);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "Nova|Ability", meta=(AutoCreateRefTerm = "Context"))
+	const UGameplayEffect* GetGameplayEffectFromSpec(FGameplayEffectSpec Spec);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "", meta=(AutoCreateRefTerm = "Context"))
+	int32 GetAbilityActiveCount(UAbilitySystemComponent* AbilitySystemComponent,  TSubclassOf<UGameplayAbility> AbilityClass);
+	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "", meta=(AutoCreateRefTerm = "Context"))
+	int32 GetGameplayTagCount (UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag);
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "",meta=(AutoCreateRefTerm = "Context"))
+	FString GetAttributeName(FGameplayAttribute Attribute);
 public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "AbilityWidget")
 	void InitAbilityWidget(UAbilitySystemComponent* AbilitySystemComponent);

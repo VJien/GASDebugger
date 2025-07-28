@@ -148,6 +148,79 @@ bool UGASDebuggerWidgetBase::RunDirectly(AActor*& OutASCOwner, UAbilitySystemCom
 	return bInit;
 }
 
+FGameplayEffectSpec UGASDebuggerWidgetBase::GetGameplayEffectSpecFromHandle(
+	UAbilitySystemComponent* AbilitySystemComponent, FActiveGameplayEffectHandle Handle)
+{
+	if (AbilitySystemComponent && Handle.IsValid())
+	{
+		auto GE = AbilitySystemComponent->GetActiveGameplayEffect(Handle);
+		if (GE)
+		{
+			return GE->Spec;
+		}
+	}
+	return FGameplayEffectSpec();
+}
+
+float UGASDebuggerWidgetBase::GetGameplayEffectDefaultDuration(FGameplayEffectSpec Spec)
+{
+	return Spec.Duration;
+}
+
+float UGASDebuggerWidgetBase::GetGameplayEffectCurrentTimeByHandle(UAbilitySystemComponent* AbilitySystemComponent,
+	FActiveGameplayEffectHandle Handle)
+{
+	auto GE =  AbilitySystemComponent->GetActiveGameplayEffect(Handle);
+	return GE->GetTimeRemaining(AbilitySystemComponent->GetWorld()->GetTimeSeconds());
+}
+
+TArray<FGameplayEffectSpec> UGASDebuggerWidgetBase::GetAllActiveGameplayEffects(
+	UAbilitySystemComponent* AbilitySystemComponent)
+{
+	TArray<FGameplayEffectSpec> Results;
+	if (AbilitySystemComponent == nullptr)
+	{
+		return Results;
+	}
+	AbilitySystemComponent->GetAllActiveGameplayEffectSpecs(Results);
+	return Results;
+}
+
+const UGameplayEffect* UGASDebuggerWidgetBase::GetGameplayEffectFromSpec(FGameplayEffectSpec Spec)
+{
+	return Spec.Def;
+}
+int32 UGASDebuggerWidgetBase::GetAbilityActiveCount(UAbilitySystemComponent* AbilitySystemComponent,
+												 TSubclassOf<UGameplayAbility> AbilityClass)
+{
+	if (AbilitySystemComponent == nullptr || AbilityClass == nullptr)
+	{
+		return -1;
+	}
+	auto AbilitySpecs =  AbilitySystemComponent->GetActivatableAbilities();
+	for (auto&& Spec: AbilitySpecs)
+	{
+		if (Spec.Ability->GetClass() == AbilityClass)
+		{
+			return Spec.ActiveCount;
+		}
+	}
+	return 0;
+}
+
+int32 UGASDebuggerWidgetBase::GetGameplayTagCount(UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag)
+{
+	if (AbilitySystemComponent == nullptr || !Tag.IsValid())
+	{
+		return -1;
+	}
+	return AbilitySystemComponent->GetTagCount(Tag);
+}
+FString UGASDebuggerWidgetBase::GetAttributeName(FGameplayAttribute Attribute)
+{
+	return Attribute.GetName();
+}
+
 void UGASDebuggerWidgetBase::InitAbilityWidget_Implementation(UAbilitySystemComponent* AbilitySystemComponent)
 {
 	OwningAbilitySystemComponent = AbilitySystemComponent;

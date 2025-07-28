@@ -16,13 +16,8 @@ class GASDEBUGGER_API UGASDebuggerLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 public:
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "", meta=(AutoCreateRefTerm = "Context"))
-	static int32 GetAbilityActiveCount(UAbilitySystemComponent* AbilitySystemComponent,  TSubclassOf<UGameplayAbility> AbilityClass);
-	UFUNCTION(BlueprintCallable, BlueprintPure,Category = "", meta=(AutoCreateRefTerm = "Context"))
-	static int32 GetGameplayTagCount (UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag);
-
+	
 	static FString GetTimeInfo();
 
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "",meta=(AutoCreateRefTerm = "Context"))
-	static FString GetAttributeName(FGameplayAttribute Attribute);
+
 };
