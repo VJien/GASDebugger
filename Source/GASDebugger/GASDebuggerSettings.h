@@ -26,4 +26,10 @@ public:
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Config, meta = (DisplayName = "Enable Logging"))
 	bool bEnableLogging = false;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Config, meta = (DisplayName = "Attribute Log Update Frequency (s)", ClampMin = "0.0", EditCondition = "bEnableLogging",HideEditCondition))
+	float AttributeLogUpdateFrequency = 0.0f;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Config, meta = (DisplayName = "Attribute Log Decimal Precision", ClampMin = "0", ClampMax = "6", EditCondition = "bEnableLogging",HideEditCondition))
+	int32 AttributeLogDecimalPrecision = 2;
 };

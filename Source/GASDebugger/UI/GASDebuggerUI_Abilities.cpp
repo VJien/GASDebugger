@@ -62,7 +62,7 @@ void UGASDebuggerUI_Abilities::UpdateAbilities()
 		{
 			if (UGASDebuggerSettings::Get()->bEnableLogging && RemovedAbility)
 			{
-				FString LogMessage = FString::Printf(TEXT("%s - Ability Removed: %s (Polled)"), *FDateTime::Now().ToString(), *RemovedAbility->GetName());
+				FString LogMessage = FString::Printf(TEXT("%s - Ability Removed: %s "), *FDateTime::Now().ToString(), *RemovedAbility->GetName());
 				FGASDebuggerLogger::Log(ELogCategory::Abilities, LogMessage);
 			}
 		}
@@ -74,7 +74,7 @@ void UGASDebuggerUI_Abilities::UpdateAbilities()
 			{
 				if (UGASDebuggerSettings::Get()->bEnableLogging && NewAbility)
 				{
-					FString LogMessage = FString::Printf(TEXT("%s - Ability Given: %s (Polled)"), *FDateTime::Now().ToString(), *NewAbility->GetName());
+					FString LogMessage = FString::Printf(TEXT("%s - Ability Given: %s "), *FDateTime::Now().ToString(), *NewAbility->GetName());
 					FGASDebuggerLogger::Log(ELogCategory::Abilities, LogMessage);
 				}
 			}
