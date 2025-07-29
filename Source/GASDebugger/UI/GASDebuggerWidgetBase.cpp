@@ -221,6 +221,12 @@ FString UGASDebuggerWidgetBase::GetAttributeName(FGameplayAttribute Attribute)
 	return Attribute.GetName();
 }
 
+bool UGASDebuggerWidgetBase::EqualEqual_ActiveGameplayEffectHandle(const FActiveGameplayEffectHandle& A,
+	const FActiveGameplayEffectHandle& B)
+{
+	return  A == B;
+}
+
 void UGASDebuggerWidgetBase::InitAbilityWidget_Implementation(UAbilitySystemComponent* AbilitySystemComponent)
 {
 	OwningAbilitySystemComponent = AbilitySystemComponent;

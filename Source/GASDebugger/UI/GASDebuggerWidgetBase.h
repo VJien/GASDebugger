@@ -42,7 +42,7 @@ protected:
 	UFUNCTION(BlueprintCallable)
 	bool RunDirectly(AActor*& OutASCOwner, UAbilitySystemComponent*& OutASC);
 	
-	UPROPERTY(BlueprintReadOnly)
+	UPROPERTY(BlueprintReadWrite)
 	UAbilitySystemComponent* OwningAbilitySystemComponent = nullptr;
 
 
@@ -65,6 +65,10 @@ protected:
 	int32 GetGameplayTagCount (UAbilitySystemComponent* AbilitySystemComponent, const FGameplayTag& Tag);
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "",meta=(AutoCreateRefTerm = "Context"))
 	FString GetAttributeName(FGameplayAttribute Attribute);
+
+	UFUNCTION(BlueprintPure, Category = "Ability|GameplayEffect", meta = (DisplayName = "Equal (Active Gameplay Effect Handle)", CompactNodeTitle = "==", ScriptOperator = "=="))
+	bool EqualEqual_ActiveGameplayEffectHandle(const FActiveGameplayEffectHandle& A, const FActiveGameplayEffectHandle& B);
+
 public:
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable, Category = "AbilityWidget")
 	void InitAbilityWidget(UAbilitySystemComponent* AbilitySystemComponent);
