@@ -9,7 +9,8 @@ enum class ELogCategory : uint8
 	Abilities,
 	Tags,
 	Attributes,
-	GameplayEffects
+	GameplayEffects,
+	All
 };
 
 class FGASDebuggerLogger

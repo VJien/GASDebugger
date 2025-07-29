@@ -15,10 +15,10 @@ class GASDEBUGGER_API UGASDebuggerUI_Attributes : public UGASDebuggerWidgetBase
 	GENERATED_BODY()
 public:
 	virtual void InitAbilityWidget_Implementation(UAbilitySystemComponent* InOwningAbilitySystemComponent) override;
-	virtual void NativeTick(const FGeometry& MyGeometry, float InDeltaTime) override;
 	virtual void NativeConstruct() override;
 protected:
 	UFUNCTION(BlueprintCallable)
 	TArray<FGameplayAttribute> GetAttributes() const;
 
+	void OnAttributeChanged(const FOnAttributeChangeData& Data);
 };

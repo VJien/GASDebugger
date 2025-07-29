@@ -42,48 +42,50 @@ void FGASDebuggerLogger::StopLogging()
 
 void FGASDebuggerLogger::Log(ELogCategory Category, const FString& Message)
 {
-	if (!bIsLogging)
-	{
-		return;
-	}
+    if (!bIsLogging)
+    {
+        return;
+    }
 
-	if (!LogArchives.Contains(Category))
-	{
-		FString CategoryName;
-		switch (Category)
-		{
-		case ELogCategory::Abilities:
-			CategoryName = TEXT("Abilities");
-			break;
-		case ELogCategory::Tags:
-			CategoryName = TEXT("Tags");
-			break;
-		case ELogCategory::Attributes:
-			CategoryName = TEXT("Attributes");
-			break;
-		case ELogCategory::GameplayEffects:
-			CategoryName = TEXT("GameplayEffects");
-			break;
-		default:
-			return; 
-		}
+    auto GetOrCreateLogArchive = [&](ELogCategory LogCategory) -> FArchive*
+    {
+        if (!LogArchives.Contains(LogCategory))
+        {
+            FString CategoryName;
+            switch (LogCategory)
+            {
+            case ELogCategory::Abilities: CategoryName = TEXT("Abilities"); break;
+            case ELogCategory::Tags: CategoryName = TEXT("Tags"); break;
+            case ELogCategory::Attributes: CategoryName = TEXT("Attributes"); break;
+            case ELogCategory::GameplayEffects: CategoryName = TEXT("GameplayEffects"); break;
+            case ELogCategory::All: CategoryName = TEXT("All"); break;
+            default: return nullptr;
+            }
 
-		FString FilePath = SessionDir / (CategoryName + TEXT(".log"));
-		FArchive* Ar = IFileManager::Get().CreateFileWriter(*FilePath, FILEWRITE_Append);
-		if (Ar)
-		{
-			LogArchives.Add(Category, TUniquePtr<FArchive>(Ar));
-		}
-		else
-		{
-			return; // Failed to create file writer
-		}
-	}
+            FString FilePath = SessionDir / (CategoryName + TEXT(".log"));
+            FArchive* Ar = IFileManager::Get().CreateFileWriter(*FilePath, FILEWRITE_Append);
+            if (Ar)
+            {
+                LogArchives.Add(LogCategory, TUniquePtr<FArchive>(Ar));
+            }
+            return Ar;
+        }
+        return LogArchives[LogCategory].Get();
+    };
 
-	if (FArchive* Ar = LogArchives[Category].Get())
-	{
-		FString LogLine = FString::Printf(TEXT("%s\r\n"), *Message);
-		Ar->Serialize(TCHAR_TO_ANSI(*LogLine), LogLine.Len());
-		Ar->Flush();
-	}
+    // Log to the specific category file
+    if (FArchive* CategoryAr = GetOrCreateLogArchive(Category))
+    {
+        FString LogLine = FString::Printf(TEXT("%s\r\n"), *Message);
+        CategoryAr->Serialize(TCHAR_TO_ANSI(*LogLine), LogLine.Len());
+        CategoryAr->Flush();
+    }
+
+    // Also log to the "All" file
+    if (FArchive* AllAr = GetOrCreateLogArchive(ELogCategory::All))
+    {
+        FString LogLine = FString::Printf(TEXT("%s\r\n"), *Message);
+        AllAr->Serialize(TCHAR_TO_ANSI(*LogLine), LogLine.Len());
+        AllAr->Flush();
+    }
 }
