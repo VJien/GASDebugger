@@ -28,17 +28,19 @@ protected:
 	void OnGameplayEffectApplied(const TArray<FActiveGameplayEffectHandle>& AppliedGameplayEffect);
 
 	
-	void CompareGEs(const TArray<FActiveGameplayEffectHandle>& Current,  TArray<FActiveGameplayEffectHandle>& Removed, TArray<FActiveGameplayEffectHandle>& Applied);
+	void CompareGEs(const TArray<FActiveGameplayEffectHandle>& Current, TArray<FActiveGameplayEffectHandle>& Removed, TArray<FActiveGameplayEffectHandle>& Applied);
 
+protected:
+	// Cache for active GE info. Key is the handle, Value is the GE's name.
+	// This allows us to retrieve the name of a GE even after it has been removed.
+	UPROPERTY()
+	TMap<FActiveGameplayEffectHandle, FString> ActiveGEInfos;
 
+	// Variables for UI updates
 	UPROPERTY()
 	TArray<FActiveGameplayEffectHandle> CurrActiveGameplayEffects;
-	UPROPERTY()
-	TArray<FActiveGameplayEffectHandle> LastActiveGameplayEffects;
 	UPROPERTY()
 	TArray<FActiveGameplayEffectHandle> RemovedGameplayEffects;
 	UPROPERTY()
 	TArray<FActiveGameplayEffectHandle> AppliedGameplayEffects;
-
-	
 };

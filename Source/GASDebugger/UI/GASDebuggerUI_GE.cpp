@@ -9,6 +9,7 @@
 void UGASDebuggerUI_GE::InitAbilityWidget_Implementation(UAbilitySystemComponent* AbilitySystemComponent)
 {
 	Super::InitAbilityWidget_Implementation(AbilitySystemComponent);
+	ActiveGEInfos.Empty();
 }
 
 void UGASDebuggerUI_GE::NativeTick(const FGeometry& MyGeometry, float InDeltaTime)
@@ -24,13 +25,12 @@ void UGASDebuggerUI_GE::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 	const FActiveGameplayEffectsContainer& GeContainer = OwningAbilitySystemComponent->GetActiveGameplayEffects();
 	CurrActiveGameplayEffects = GeContainer.GetAllActiveEffectHandles();
 #else
-	// This is a simplified way for older engines, might need adjustment based on specific 4.x version
 	FGameplayEffectQuery Query;
 	Query.EffectSource = nullptr;
 	CurrActiveGameplayEffects = OwningAbilitySystemComponent->GetActiveEffects(Query);
 #endif
 	
-	if (CurrActiveGameplayEffects.Num() == 0 && LastActiveGameplayEffects.Num() == 0)
+	if (CurrActiveGameplayEffects.Num() == 0 && ActiveGEInfos.Num() == 0)
 	{
 		return;
 	}
@@ -38,9 +38,6 @@ void UGASDebuggerUI_GE::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 	// Compare and find differences
 	CompareGEs(CurrActiveGameplayEffects, RemovedGameplayEffects, AppliedGameplayEffects);
 	
-	// Update the list for the next frame
-	LastActiveGameplayEffects = CurrActiveGameplayEffects;
-
 	// Notify blueprints if there are changes
 	if (AppliedGameplayEffects.Num() > 0)
 	{
@@ -57,35 +54,47 @@ void UGASDebuggerUI_GE::CompareGEs(const TArray<FActiveGameplayEffectHandle>& Cu
 	Removed.Empty();
 	Applied.Empty();
 
+	TArray<FActiveGameplayEffectHandle> LastHandles;
+	ActiveGEInfos.GetKeys(LastHandles);
+
 	// Find removed effects
-	for (const FActiveGameplayEffectHandle& LastGEHandle : LastActiveGameplayEffects)
+	for (const FActiveGameplayEffectHandle& LastGEHandle : LastHandles)
 	{
 		if (!Current.Contains(LastGEHandle))
 		{
 			Removed.Add(LastGEHandle);
 			if (UGASDebuggerSettings::Get()->bEnableLogging)
 			{
-				const UGameplayEffect* GE = GetGameplayEffectFromSpec(GetGameplayEffectSpecFromHandle(OwningAbilitySystemComponent, LastGEHandle));
-				FString GEName = GE ? GE->GetName() : TEXT("Unknown GE");
+				// Get the name from our cache
+				FString GEName = ActiveGEInfos.FindRef(LastGEHandle);
 				FString LogMessage = FString::Printf(TEXT("%s - GE Removed: %s"), *FDateTime::Now().ToString(), *GEName);
 				FGASDebuggerLogger::Log(ELogCategory::GameplayEffects, LogMessage);
 			}
+			// Remove from the cache
+			ActiveGEInfos.Remove(LastGEHandle);
 		}
 	}
 
 	// Find newly applied effects
 	for (const FActiveGameplayEffectHandle& CurrentGEHandle : Current)
 	{
-		if (!LastActiveGameplayEffects.Contains(CurrentGEHandle))
+		if (!ActiveGEInfos.Contains(CurrentGEHandle))
 		{
 			Applied.Add(CurrentGEHandle);
+			FString GEName = TEXT("Unknown GE");
 			if (UGASDebuggerSettings::Get()->bEnableLogging)
 			{
+				// Get the name while the handle is still valid
 				const UGameplayEffect* GE = GetGameplayEffectFromSpec(GetGameplayEffectSpecFromHandle(OwningAbilitySystemComponent, CurrentGEHandle));
-				FString GEName = GE ? GE->GetName() : TEXT("Unknown GE");
+				if (GE)
+				{
+					GEName = GE->GetName();
+				}
 				FString LogMessage = FString::Printf(TEXT("%s - GE Applied: %s"), *FDateTime::Now().ToString(), *GEName);
 				FGASDebuggerLogger::Log(ELogCategory::GameplayEffects, LogMessage);
 			}
+			// Add to our cache for later
+			ActiveGEInfos.Add(CurrentGEHandle, GEName);
 		}
 	}
 }
