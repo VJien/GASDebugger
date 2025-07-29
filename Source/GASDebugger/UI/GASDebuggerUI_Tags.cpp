@@ -127,7 +127,7 @@ void UGASDebuggerUI_Tags::UpdateTags()
 		{
 			if (!TagsContainer_Current.HasTag(OldTag))
 			{
-				Tags_Old.Add({OldTag, UGASDebuggerLibrary::GetTimeInfo()});
+				Tags_Old.Add({OldTag, UGASDebuggerLibrary::GetTimeInfo(), FDateTime::Now()});
 			}
 		}
 		
@@ -139,4 +139,32 @@ void UGASDebuggerUI_Tags::UpdateTags()
 
 		TagsContainer_Old = TagsContainer_Current;
 	}
+}
+
+void UGASDebuggerUI_Tags::SortDebuggerTags(TArray<FGASDebuggerTagInfo>& Tags, bool bNewFirst)
+{
+	Tags.Sort([bNewFirst](const FGASDebuggerTagInfo& A, const FGASDebuggerTagInfo& B)
+	{
+		if (bNewFirst)
+		{
+			return A.LastUpdatedTime > B.LastUpdatedTime;
+		}
+		else
+		{
+			return A.LastUpdatedTime < B.LastUpdatedTime;
+		}
+	});
+}
+
+void UGASDebuggerUI_Tags::UniqueDebuggerTags(TArray<FGASDebuggerTagInfo>& Tags)
+{
+	TArray<FGASDebuggerTagInfo> UniqueTags;
+	for (const FGASDebuggerTagInfo& TagInfo : Tags)
+	{
+		if (!UniqueTags.Contains(TagInfo))
+		{
+			UniqueTags.Add(TagInfo);
+		}
+	}
+	Tags = UniqueTags;
 }

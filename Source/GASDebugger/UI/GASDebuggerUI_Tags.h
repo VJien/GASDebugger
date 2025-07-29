@@ -20,16 +20,26 @@ struct FGASDebuggerTagInfo
 	{
 		Tag = FGameplayTag::EmptyTag;
 		Info = FString();
+		LastUpdatedTime = FDateTime::MinValue();
 	}
-	FGASDebuggerTagInfo(const FGameplayTag& InTag, const FString& InInfo)
-		: Tag(InTag), Info(InInfo)
+	FGASDebuggerTagInfo(const FGameplayTag& InTag, const FString& InInfo, const FDateTime& InLastUpdatedTime)
+		: Tag(InTag), Info(InInfo), LastUpdatedTime(InLastUpdatedTime)
 	{
 	}
-	
+	bool operator==(const FGASDebuggerTagInfo& Other) const
+	{
+		return Tag == Other.Tag && Info == Other.Info && LastUpdatedTime == Other.LastUpdatedTime;
+	}
+	bool operator!=(const FGASDebuggerTagInfo& Other) const
+	{
+		return !(*this == Other);
+	}
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FGameplayTag Tag;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	FString Info;
+
+	FDateTime LastUpdatedTime; // Timestamp for when the tag was last updated
 };
 
 
@@ -53,6 +63,10 @@ public:
 	UFUNCTION(BlueprintCallable,BlueprintImplementableEvent)
 	void RefreshCurrentTagsWidget(const TArray<FGameplayTag>& CurrentTags);
 	
+	UFUNCTION(BlueprintCallable)
+	void SortDebuggerTags(UPARAM(ref)TArray<FGASDebuggerTagInfo>& Tags, bool bNewFirst = true);
+	UFUNCTION(BlueprintCallable)
+	void UniqueDebuggerTags(UPARAM(ref)TArray<FGASDebuggerTagInfo>& Tags);
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, meta=(BindWidget))
 	UVerticalBox* TagsBox_Current = nullptr;
