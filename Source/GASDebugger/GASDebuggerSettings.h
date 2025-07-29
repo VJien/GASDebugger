@@ -23,4 +23,7 @@ public:
 
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Config)
 	TSoftClassPtr<UUserWidget> Widget = nullptr;
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Config, meta = (DisplayName = "Enable Logging"))
+	bool bEnableLogging = false;
 };

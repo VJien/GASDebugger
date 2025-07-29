@@ -66,7 +66,7 @@ protected:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "",meta=(AutoCreateRefTerm = "Context"))
 	FString GetAttributeName(FGameplayAttribute Attribute);
 
-	UFUNCTION(BlueprintPure, Category = "Ability|GameplayEffect", meta = (DisplayName = "Equal (Active Gameplay Effect Handle)", CompactNodeTitle = "==", ScriptOperator = "=="))
+	UFUNCTION(BlueprintPure, Category = "Ability|GameplayEffect", meta = (DisplayName = "Equal (Active Gameplay Effect Handle)", CompactNodeTitle = "=="))
 	bool EqualEqual_ActiveGameplayEffectHandle(const FActiveGameplayEffectHandle& A, const FActiveGameplayEffectHandle& B);
 
 public:

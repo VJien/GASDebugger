@@ -2,10 +2,9 @@
 
 
 #include "GASDebuggerUI_GE.h"
-
-
-
 #include "AbilitySystemComponent.h"
+#include "GASDebugger/GASDebuggerSettings.h"
+#include "GASDebugger/Demo/GASDebuggerLogger.h"
 
 void UGASDebuggerUI_GE::InitAbilityWidget_Implementation(UAbilitySystemComponent* AbilitySystemComponent)
 {
@@ -19,60 +18,74 @@ void UGASDebuggerUI_GE::NativeTick(const FGeometry& MyGeometry, float InDeltaTim
 	{
 		return;
 	}
+	
+	// Get current effects based on engine version
 #if UE5_OR_LATER
 	const FActiveGameplayEffectsContainer& GeContainer = OwningAbilitySystemComponent->GetActiveGameplayEffects();
 	CurrActiveGameplayEffects = GeContainer.GetAllActiveEffectHandles();
 #else
-	CurrActiveGameplayEffects = OwningAbilitySystemComponent->GetActiveEffects(FGameplayEffectQuery());
+	// This is a simplified way for older engines, might need adjustment based on specific 4.x version
+	FGameplayEffectQuery Query;
+	Query.EffectSource = nullptr;
+	CurrActiveGameplayEffects = OwningAbilitySystemComponent->GetActiveEffects(Query);
 #endif
 	
-	
-	
-
 	if (CurrActiveGameplayEffects.Num() == 0 && LastActiveGameplayEffects.Num() == 0)
 	{
 		return;
 	}
 	
-	
-	// 初始化比较
+	// Compare and find differences
 	CompareGEs(CurrActiveGameplayEffects, RemovedGameplayEffects, AppliedGameplayEffects);
 	
-	// 更新上次活动效果
+	// Update the list for the next frame
 	LastActiveGameplayEffects = CurrActiveGameplayEffects;
-	if (AppliedGameplayEffects.Num()>0)
+
+	// Notify blueprints if there are changes
+	if (AppliedGameplayEffects.Num() > 0)
 	{
 		OnGameplayEffectApplied(AppliedGameplayEffects);
 	}
-	if (RemovedGameplayEffects.Num()>0)
+	if (RemovedGameplayEffects.Num() > 0)
 	{
 		OnGameplayEffectRemoved(RemovedGameplayEffects);
 	}
 }
 
-void UGASDebuggerUI_GE::CompareGEs(const TArray<FActiveGameplayEffectHandle>& Current,  TArray<FActiveGameplayEffectHandle>& Removed, TArray<FActiveGameplayEffectHandle>& Applied)
+void UGASDebuggerUI_GE::CompareGEs(const TArray<FActiveGameplayEffectHandle>& Current, TArray<FActiveGameplayEffectHandle>& Removed, TArray<FActiveGameplayEffectHandle>& Applied)
 {
-	//比较Current和LastActiveGameplayEffects，找出Removed和Applied
-
-	// 清空 Removed 和 Applied 列表
 	Removed.Empty();
 	Applied.Empty();
-	// 找出已移除的效果
-	for (auto&& LastGE : LastActiveGameplayEffects)
+
+	// Find removed effects
+	for (const FActiveGameplayEffectHandle& LastGEHandle : LastActiveGameplayEffects)
 	{
-		if (!Current.Contains(LastGE))
+		if (!Current.Contains(LastGEHandle))
 		{
-			Removed.Add(LastGE);
-		}
-	}
-	// 找出新增的效果
-	for (auto&& CurrentGE : Current)
-	{
-		if (!LastActiveGameplayEffects.Contains(CurrentGE))
-		{
-			Applied.Add(CurrentGE);
+			Removed.Add(LastGEHandle);
+			if (UGASDebuggerSettings::Get()->bEnableLogging)
+			{
+				const UGameplayEffect* GE = GetGameplayEffectFromSpec(GetGameplayEffectSpecFromHandle(OwningAbilitySystemComponent, LastGEHandle));
+				FString GEName = GE ? GE->GetName() : TEXT("Unknown GE");
+				FString LogMessage = FString::Printf(TEXT("%s - GE Removed: %s"), *FDateTime::Now().ToString(), *GEName);
+				FGASDebuggerLogger::Log(ELogCategory::GameplayEffects, LogMessage);
+			}
 		}
 	}
 
+	// Find newly applied effects
+	for (const FActiveGameplayEffectHandle& CurrentGEHandle : Current)
+	{
+		if (!LastActiveGameplayEffects.Contains(CurrentGEHandle))
+		{
+			Applied.Add(CurrentGEHandle);
+			if (UGASDebuggerSettings::Get()->bEnableLogging)
+			{
+				const UGameplayEffect* GE = GetGameplayEffectFromSpec(GetGameplayEffectSpecFromHandle(OwningAbilitySystemComponent, CurrentGEHandle));
+				FString GEName = GE ? GE->GetName() : TEXT("Unknown GE");
+				FString LogMessage = FString::Printf(TEXT("%s - GE Applied: %s"), *FDateTime::Now().ToString(), *GEName);
+				FGASDebuggerLogger::Log(ELogCategory::GameplayEffects, LogMessage);
+			}
+		}
+	}
 }
-

@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GASDebuggerWidgetBase.h"
+#include "GameplayAbilitySpec.h"
 #include "GASDebuggerUI_Abilities.generated.h"
 
 class UGameplayAbility;
@@ -37,7 +38,11 @@ public:
 	void RefreshCurrentAbilitiesWidget(const TArray<UGameplayAbility*>& _CurrentAbilities);
 
 protected:
-	
+	void HandleGiveAbility(FGameplayAbilitySpec& Spec);
+	void HandleRemoveAbility(FGameplayAbilitySpec& Spec);
+	void HandleAbilityActivated(UGameplayAbility* Ability);
+	void HandleAbilityEnded( const FAbilityEndedData& Data);
+
 	UPROPERTY(BlueprintReadOnly)
 	TArray<class UGameplayAbility*> CurrentAbilities;
 	UPROPERTY(BlueprintReadOnly)

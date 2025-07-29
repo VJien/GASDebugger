@@ -11,6 +11,8 @@
 #include "ToolMenus.h"
 #include "Blueprint/UserWidget.h"
 #include "Widgets/Layout/SScaleBox.h"
+#include "Editor.h"
+#include "Demo/GASDebuggerLogger.h"
 
 static const FName GASDebuggerTabName("GASDebugger");
 
@@ -37,6 +39,9 @@ void FGASDebuggerModule::StartupModule()
 	FGlobalTabmanager::Get()->RegisterNomadTabSpawner(GASDebuggerTabName, FOnSpawnTab::CreateRaw(this, &FGASDebuggerModule::OnSpawnPluginTab))
 		.SetDisplayName(LOCTEXT("FGASDebuggerTabTitle", "GASDebugger"))
 		.SetMenuType(ETabSpawnerMenuType::Hidden);
+
+	FEditorDelegates::BeginPIE.AddRaw(this, &FGASDebuggerModule::OnBeginPIE);
+	FEditorDelegates::EndPIE.AddRaw(this, &FGASDebuggerModule::OnEndPIE);
 }
 
 void FGASDebuggerModule::ShutdownModule()
@@ -53,6 +58,9 @@ void FGASDebuggerModule::ShutdownModule()
 	FGASDebuggerCommands::Unregister();
 
 	FGlobalTabmanager::Get()->UnregisterNomadTabSpawner(GASDebuggerTabName);
+
+	FEditorDelegates::BeginPIE.RemoveAll(this);
+	FEditorDelegates::EndPIE.RemoveAll(this);
 }
 
 TSharedRef<SDockTab> FGASDebuggerModule::OnSpawnPluginTab(const FSpawnTabArgs& SpawnTabArgs)
@@ -97,6 +105,16 @@ TSharedRef<SDockTab> FGASDebuggerModule::OnSpawnPluginTab(const FSpawnTabArgs& S
 void FGASDebuggerModule::PluginButtonClicked()
 {
 	FGlobalTabmanager::Get()->TryInvokeTab(GASDebuggerTabName);
+}
+
+void FGASDebuggerModule::OnBeginPIE(bool bIsSimulating)
+{
+	FGASDebuggerLogger::StartLogging();
+}
+
+void FGASDebuggerModule::OnEndPIE(bool bIsSimulating)
+{
+	FGASDebuggerLogger::StopLogging();
 }
 
 void FGASDebuggerModule::RegisterMenus()

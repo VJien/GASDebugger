@@ -26,6 +26,9 @@ public:
 	/** This function will be bound to Command (by default it will bring up plugin window) */
 	void PluginButtonClicked();
 	
+	void OnBeginPIE(bool bIsSimulating);
+	void OnEndPIE(bool bIsSimulating);
+
 private:
 
 	void RegisterMenus();

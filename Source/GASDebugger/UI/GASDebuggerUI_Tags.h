@@ -68,6 +68,10 @@ public:
 	UPROPERTY()
 	TArray<FGASDebuggerTagInfo> Tags_Old;
 
+protected:
 	
+	void LogTagCountChanges();
 
+	// Map to store previous frame's tag counts, used for logging only
+	TMap<FGameplayTag, int32> OldTagCounts;
 };
