@@ -7,8 +7,13 @@
 #include "GASDebugger/GASDebuggerSettings.h"
 
 TMap<ELogCategory, TUniquePtr<FArchive>> FGASDebuggerLogger::LogArchives;
+FString FGASDebuggerLogger::FileDire = FPaths::ConvertRelativePathToFull(FPaths::ProjectLogDir())  / TEXT("GASDebugger");
 FString FGASDebuggerLogger::SessionDir;
 bool FGASDebuggerLogger::bIsLogging = false;
+
+FGASDebuggerLogger::FGASDebuggerLogger()
+{
+}
 
 void FGASDebuggerLogger::StartLogging()
 {
@@ -16,9 +21,8 @@ void FGASDebuggerLogger::StartLogging()
 	{
 		return;
 	}
-
+	SessionDir = FileDire / FDateTime::Now().ToString();
 	bIsLogging = true;
-	SessionDir = FPaths::ProjectLogDir() / TEXT("GASDebugger") / FDateTime::Now().ToString();
 	IFileManager::Get().MakeDirectory(*SessionDir, true);
 }
 
@@ -88,4 +92,9 @@ void FGASDebuggerLogger::Log(ELogCategory Category, const FString& Message)
         AllAr->Serialize(TCHAR_TO_ANSI(*LogLine), LogLine.Len());
         AllAr->Flush();
     }
+}
+
+FString FGASDebuggerLogger::GetLogFilePath()
+{
+	return FileDire;
 }

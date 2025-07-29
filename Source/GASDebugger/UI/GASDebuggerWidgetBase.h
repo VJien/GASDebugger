@@ -41,6 +41,10 @@ protected:
 	//自动查询玩家类并运行
 	UFUNCTION(BlueprintCallable)
 	bool RunDirectly(AActor*& OutASCOwner, UAbilitySystemComponent*& OutASC);
+
+
+	UFUNCTION(BlueprintCallable)
+	void OpenLogDirectory();
 	
 	UPROPERTY(BlueprintReadWrite)
 	UAbilitySystemComponent* OwningAbilitySystemComponent = nullptr;

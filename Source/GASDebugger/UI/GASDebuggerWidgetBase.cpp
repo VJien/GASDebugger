@@ -5,6 +5,7 @@
 
 #include "AbilitySystemComponent.h"
 #include "GameFramework/Character.h"
+#include "GASDebugger/Demo/GASDebuggerLogger.h"
 #include "Kismet/GameplayStatics.h"
 
 void UGASDebuggerWidgetBase::NativeConstruct()
@@ -146,6 +147,25 @@ bool UGASDebuggerWidgetBase::RunDirectly(AActor*& OutASCOwner, UAbilitySystemCom
 		}
 	}
 	return bInit;
+}
+
+void UGASDebuggerWidgetBase::OpenLogDirectory()
+{
+	if (GEditor)
+	{
+		FString LogDirectory = FGASDebuggerLogger::GetLogFilePath();
+		//相对路径转换成绝对路径
+		if (!FPaths::IsRelative(LogDirectory))
+		{
+			LogDirectory = FPaths::ConvertRelativePathToFull(LogDirectory);
+		}
+		FWindowsPlatformProcess::ExploreFolder(*LogDirectory);
+		UE_LOG(LogTemp, Log, TEXT("Opened log directory: %s"), *LogDirectory);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("GEditor is null, cannot open log directory."));
+	}
 }
 
 FGameplayEffectSpec UGASDebuggerWidgetBase::GetGameplayEffectSpecFromHandle(
