@@ -8,7 +8,7 @@
 
 class UUserWidget;
 
-UCLASS(BlueprintType, Config=Nova, defaultconfig, DisplayName = "GAS Debugger")
+UCLASS(BlueprintType, Config=GASDebugger, defaultconfig, DisplayName = "GAS Debugger")
 class GASDEBUGGER_API UGASDebuggerSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
