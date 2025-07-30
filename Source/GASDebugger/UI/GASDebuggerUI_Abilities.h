@@ -7,6 +7,7 @@
 #include "GameplayAbilitySpec.h"
 #include "GASDebuggerUI_Abilities.generated.h"
 
+struct FAbilityEndedData;
 class UGameplayAbility;
 
 USTRUCT(BlueprintType)

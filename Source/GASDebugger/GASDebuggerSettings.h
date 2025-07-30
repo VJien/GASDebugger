@@ -12,6 +12,8 @@ UCLASS(BlueprintType, Config=Nova, defaultconfig, DisplayName = "GAS Debugger")
 class GASDEBUGGER_API UGASDebuggerSettings : public UDeveloperSettings
 {
 	GENERATED_BODY()
+	UGASDebuggerSettings();
+	
 	virtual FName GetCategoryName() const override { return TEXT("Game"); }
 
 	virtual FName GetSectionName() const override { return TEXT("GAS Debugger "); }
@@ -21,7 +23,7 @@ public:
 		return GetMutableDefault<UGASDebuggerSettings>();
 	}
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Config)
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Config, meta=(FilePathFilter = "GASDebugger", DisplayName = "Debugger Widget",AllowedClasses = "EditorUtilityWidget"))
 	TSoftClassPtr<UUserWidget> Widget = nullptr;
 
 	UPROPERTY(BlueprintReadOnly, EditAnywhere, Config, meta = (DisplayName = "Enable Logging"))

@@ -131,15 +131,14 @@ void FGASDebuggerModule::RegisterMenus()
 	}
 
 	{
-//todo 不占用肉鸽顶部工具栏
-		/*UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
+		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
 		{
 			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
 			{
 				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FGASDebuggerCommands::Get().OpenPluginWindow));
 				Entry.SetCommandList(PluginCommands);
 			}
-		}*/
+		}
 	}
 }
 

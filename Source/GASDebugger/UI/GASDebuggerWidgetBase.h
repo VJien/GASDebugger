@@ -3,9 +3,9 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EditorUtilityWidget.h"
 #include "GameplayEffect.h"
 #include "GameplayEffectTypes.h"
-#include "Blutility/Classes/EditorUtilityWidget.h"
 #include "GASDebuggerWidgetBase.generated.h"
 
 class UAbilitySystemComponent;

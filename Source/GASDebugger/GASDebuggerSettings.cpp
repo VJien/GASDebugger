@@ -2,3 +2,9 @@
 
 
 #include "GASDebuggerSettings.h"
+
+#include "Blueprint/UserWidget.h"
+
+UGASDebuggerSettings::UGASDebuggerSettings()
+{
+}
