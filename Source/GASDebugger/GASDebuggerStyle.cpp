@@ -45,7 +45,7 @@ TSharedRef< FSlateStyleSet > FGASDebuggerStyle::Create()
 	TSharedRef< FSlateStyleSet > Style = MakeShareable(new FSlateStyleSet("GASDebuggerStyle"));
 	Style->SetContentRoot(IPluginManager::Get().FindPlugin("GASDebugger")->GetBaseDir() / TEXT("Resources"));
 
-	Style->Set("GASDebugger.OpenPluginWindow", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
+	Style->Set("GASDebugger.GASDebuggerCommand", new IMAGE_BRUSH(TEXT("ButtonIcon_40x"), Icon40x40));
 
 	return Style;
 }

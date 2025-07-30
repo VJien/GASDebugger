@@ -6,7 +6,7 @@
 
 void FGASDebuggerCommands::RegisterCommands()
 {
-	UI_COMMAND(OpenPluginWindow, "GASDebugger", "Bring up GASDebugger window", EUserInterfaceActionType::Button, FInputGesture());
+	UI_COMMAND(GASDebuggerCommand, "GASDebugger", "Bring up GASDebugger window", EUserInterfaceActionType::Button, FInputGesture());
 }
 
 #undef LOCTEXT_NAMESPACE

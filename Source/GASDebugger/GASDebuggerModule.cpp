@@ -30,7 +30,7 @@ void FGASDebuggerModule::StartupModule()
 	PluginCommands = MakeShareable(new FUICommandList);
 
 	PluginCommands->MapAction(
-		FGASDebuggerCommands::Get().OpenPluginWindow,
+		FGASDebuggerCommands::Get().GASDebuggerCommand,
 		FExecuteAction::CreateRaw(this, &FGASDebuggerModule::PluginButtonClicked),
 		FCanExecuteAction());
 
@@ -126,16 +126,16 @@ void FGASDebuggerModule::RegisterMenus()
 		UToolMenu* Menu = UToolMenus::Get()->ExtendMenu("LevelEditor.MainMenu.Window");
 		{
 			FToolMenuSection& Section = Menu->FindOrAddSection("WindowLayout");
-			Section.AddMenuEntryWithCommandList(FGASDebuggerCommands::Get().OpenPluginWindow, PluginCommands);
+			Section.AddMenuEntryWithCommandList(FGASDebuggerCommands::Get().GASDebuggerCommand, PluginCommands);
 		}
 	}
-
+ 
 	{
-		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar");
+		UToolMenu* ToolbarMenu = UToolMenus::Get()->ExtendMenu("LevelEditor.LevelEditorToolBar.PlayToolBar");
 		{
-			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("Settings");
+			FToolMenuSection& Section = ToolbarMenu->FindOrAddSection("GASDebuggerToolbar");
 			{
-				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FGASDebuggerCommands::Get().OpenPluginWindow));
+				FToolMenuEntry& Entry = Section.AddEntry(FToolMenuEntry::InitToolBarButton(FGASDebuggerCommands::Get().GASDebuggerCommand));
 				Entry.SetCommandList(PluginCommands);
 			}
 		}
