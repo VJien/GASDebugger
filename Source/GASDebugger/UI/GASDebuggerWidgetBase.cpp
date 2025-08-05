@@ -129,7 +129,7 @@ bool UGASDebuggerWidgetBase::RunDirectly(AActor*& OutASCOwner, UAbilitySystemCom
 			{
 				return true;
 			}
-			if (auto&& PC = Cast<ACharacter>(UGameplayStatics::GetPlayerController(World, 0)))
+			if (auto&& PC = Cast<APlayerController>(UGameplayStatics::GetPlayerController(World, 0)))
 			{
 				auto&& ASC = PC->FindComponentByClass<UAbilitySystemComponent>();
 				if (ASC)

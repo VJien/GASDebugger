@@ -7,7 +7,7 @@
 #include "GASDebuggerAbilitySystemComponent.generated.h"
 
 
-UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent),BlueprintType,Blueprintable)
+UCLASS(ClassGroup=(Nova), meta=(BlueprintSpawnableComponent),BlueprintType,Blueprintable)
 class GASDEBUGGER_API UGASDebuggerAbilitySystemComponent : public UAbilitySystemComponent
 {
 	GENERATED_BODY()
